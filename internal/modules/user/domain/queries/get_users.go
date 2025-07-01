@@ -29,7 +29,7 @@ func (c *queryUsers) Execute(ctx context.Context) ([]domain.UserExposed, error) 
 
 	for i, user := range users {
 		dto := domain.UserExposed{}
-		publicUsers[i] = dto.From(user)
+		publicUsers[i] = *dto.From(user)
 	}
 
 	return publicUsers, nil

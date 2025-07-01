@@ -19,12 +19,12 @@ func NewQueryUserById(userRepository UserRepositoryPort) *queryUserById {
 	}
 }
 
-func (c *queryUserById) Execute(ctx context.Context, id string) (UserExposed, error) {
+func (c *queryUserById) Execute(ctx context.Context, id string) (*UserExposed, error) {
 	user := c.userRepository.GetUserByID(ctx, id)
-	userExposed := UserExposed{}
+	userExposed := &UserExposed{}
 
 	if user == nil {
-		return userExposed, errors.New("user not found")
+		return nil, errors.New("user not found")
 	}
 
 	return userExposed.From(user), nil

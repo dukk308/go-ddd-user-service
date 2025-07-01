@@ -13,8 +13,8 @@ type UserExposed struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func (dto *UserExposed) From(user *User) UserExposed {
-	return UserExposed{
+func (dto *UserExposed) From(user *User) *UserExposed {
+	return &UserExposed{
 		ID:        user.ID,
 		Username:  user.Username,
 		Email:     user.Email,

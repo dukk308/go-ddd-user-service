@@ -22,10 +22,12 @@ func NewQueryUserById(userRepository domain.UserRepositoryPort) *queryUserById {
 
 func (c *queryUserById) Execute(ctx context.Context, id string) (domain.UserExposed, error) {
 	user := c.userRepository.GetUserByID(ctx, id)
-	if user.ID == "" {
-		return domain.UserExposed{}, errors.New("user not found")
+	userExposed := &domain.UserExposed{}
+
+	if user == nil {
+		return *userExposed, errors.New("user not found")
 	}
 
 	dto := domain.UserExposed{}
-	return dto.From(user), nil
+	return *dto.From(user), nil
 }
