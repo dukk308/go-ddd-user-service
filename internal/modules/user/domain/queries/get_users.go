@@ -6,11 +6,11 @@ import (
 )
 
 type QueryUsersCommand interface {
-	Execute(ctx context.Context) ([]domain.ExposeUser, error)
+	Execute(ctx context.Context) ([]domain.UserExposed, error)
 }
 
 type QueryUser interface {
-	GetListUser(ctx context.Context) ([]domain.ExposeUser, error)
+	GetListUser(ctx context.Context) ([]domain.UserExposed, error)
 }
 
 type queryUsers struct {
@@ -23,17 +23,13 @@ func NewQueryUsers(userRepository domain.UserRepositoryPort) QueryUsersCommand {
 	}
 }
 
-func (c *queryUsers) Execute(ctx context.Context) ([]domain.ExposeUser, error) {
-	users, err := c.userRepository.GetListUser(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	publicUsers := make([]domain.ExposeUser, len(users))
+func (c *queryUsers) Execute(ctx context.Context) ([]domain.UserExposed, error) {
+	users := c.userRepository.GetListUser(ctx)
+	publicUsers := make([]domain.UserExposed, len(users))
 
 	for i, user := range users {
-		dto := domain.ExposeUser{}
-		publicUsers[i] = *dto.From(&user)
+		dto := domain.UserExposed{}
+		publicUsers[i] = dto.From(user)
 	}
 
 	return publicUsers, nil

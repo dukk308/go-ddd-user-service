@@ -3,10 +3,10 @@ package domain
 import "errors"
 
 type UserCreateRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	Email    string `json:"email" binding:"required,email"`
-	Phone    string `json:"phone,omitempty"`
+	Username string  `json:"username" binding:"required"`
+	Password string  `json:"password" binding:"required"`
+	Email    string  `json:"email" binding:"required,email"`
+	Phone    *string `json:"phone,omitempty"`
 }
 
 func (u *UserCreateRequest) Validate() error {

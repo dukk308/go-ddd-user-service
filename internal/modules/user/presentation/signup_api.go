@@ -31,14 +31,14 @@ func (api *signupApi) Handle(ctx *gin.Context) {
 		return
 	}
 
-	user := &domain.UserCreateRequest{
+	user := domain.UserCreateRequest{
 		Username: dto.Username,
 		Password: dto.Password,
 		Email:    dto.Email,
 		Phone:    dto.Phone,
 	}
 
-	if err := api.CreateUserCommand.Execute(ctx, user); err != nil {
+	if err := api.CreateUserCommand.Execute(ctx, &user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, common.NewApiResponseError(err.Error()))
 		return
 	}

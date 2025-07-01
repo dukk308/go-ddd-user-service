@@ -4,17 +4,17 @@ import (
 	"time"
 )
 
-type ExposeUser struct {
+type UserExposed struct {
 	ID        string    `json:"id"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
-	Phone     string    `json:"phone"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Phone     *string   `json:"phone,omitempty"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func (dto *ExposeUser) From(user *User) *ExposeUser {
-	return &ExposeUser{
+func (dto *UserExposed) From(user *User) UserExposed {
+	return UserExposed{
 		ID:        user.ID,
 		Username:  user.Username,
 		Email:     user.Email,

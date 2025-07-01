@@ -9,11 +9,11 @@ import (
 
 type UserSQL struct {
 	common.BaseSQL
-	Username string `gorm:"column:username"`
-	Email    string `gorm:"column:email"`
-	Password string `gorm:"column:password"`
-	Phone    string `gorm:"column:phone"`
-	Role     string `gorm:"column:role"`
+	Username string  `gorm:"column:username"`
+	Email    string  `gorm:"column:email"`
+	Password string  `gorm:"column:password"`
+	Phone    *string `gorm:"column:phone"`
+	Role     string  `gorm:"column:role"`
 }
 
 func (UserSQL) TableName() string {

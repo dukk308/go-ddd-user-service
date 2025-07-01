@@ -4,7 +4,7 @@ import (
 	"user-service/internal/modules/user/domain"
 )
 
-func ToDomain(userSQL UserSQL) domain.User {
+func ToDomain(userSQL UserSQL) *domain.User {
 	user := domain.User{}
 
 	user.ID = userSQL.ID
@@ -12,19 +12,21 @@ func ToDomain(userSQL UserSQL) domain.User {
 	user.Phone = userSQL.Phone
 	user.Username = userSQL.Username
 	user.Password = userSQL.Password
+	user.Role = userSQL.Role
 	user.CreatedAt = userSQL.CreatedAt
 	user.UpdatedAt = userSQL.UpdatedAt
 
-	return user
+	return &user
 }
 
-func ToEntity(user domain.User) UserSQL {
+func ToEntity(user domain.User) *UserSQL {
 	userSQL := UserSQL{}
 
 	userSQL.Email = user.Email
 	userSQL.Phone = user.Phone
 	userSQL.Username = user.Username
 	userSQL.Password = user.Password
+	userSQL.Role = user.Role
 
-	return userSQL
+	return &userSQL
 }

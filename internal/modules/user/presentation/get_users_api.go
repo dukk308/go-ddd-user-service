@@ -25,7 +25,7 @@ func NewGetUsersApi(getUserCommand queries.QueryUsersCommand) *getUsersApi {
 func (api *getUsersApi) Handle(ctx *gin.Context) {
 	users, err := api.GetUserCommand.Execute(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, common.NewApiResponseError(err.Error()))
 		return
 	}
 	ctx.JSON(http.StatusOK, common.NewApiResponse(users))

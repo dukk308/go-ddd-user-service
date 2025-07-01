@@ -7,7 +7,7 @@ import (
 )
 
 type QueryUserById interface {
-	Execute(ctx context.Context, id string) (domain.ExposeUser, error)
+	Execute(ctx context.Context, id string) (domain.UserExposed, error)
 }
 
 type queryUserById struct {
@@ -20,12 +20,12 @@ func NewQueryUserById(userRepository domain.UserRepositoryPort) *queryUserById {
 	}
 }
 
-func (c *queryUserById) Execute(ctx context.Context, id string) (domain.ExposeUser, error) {
+func (c *queryUserById) Execute(ctx context.Context, id string) (domain.UserExposed, error) {
 	user := c.userRepository.GetUserByID(ctx, id)
 	if user.ID == "" {
-		return domain.ExposeUser{}, errors.New("user not found")
+		return domain.UserExposed{}, errors.New("user not found")
 	}
 
-	dto := domain.ExposeUser{}
-	return *dto.From(&user), nil
+	dto := domain.UserExposed{}
+	return dto.From(user), nil
 }

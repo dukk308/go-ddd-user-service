@@ -15,7 +15,7 @@ func NewApiResponse(data interface{}) *ApiResponse {
 
 func NewApiResponseError(error string) *ApiResponse {
 	return &ApiResponse{
-		Message: "error",
+		Message: error,
 		Error:   error,
 	}
 }

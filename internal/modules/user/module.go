@@ -1,13 +1,13 @@
 package user
 
 import (
+	"net/http"
 	"user-service/internal/modules/user/domain/commands"
 	"user-service/internal/modules/user/domain/queries"
 	"user-service/internal/modules/user/infrastructure/persistence/relational"
 	"user-service/internal/modules/user/presentation"
-
-	"net/http"
 	"user-service/internal/shared/common"
+	loggerPgk "user-service/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -15,11 +15,12 @@ import (
 
 func UserModule(router *gin.Engine, db *gorm.DB) {
 	repository := relational.NewUserRepository(db)
+	logger, _, _ := loggerPgk.InitializeLogger("info")
 	// auth
 	{
-		authRouter := router.Group("/auth")
+		authRouter := router.Group("v1/auth")
 
-		createUserCommand := commands.NewCreateUserCommand(repository)
+		createUserCommand := commands.NewCreateUserCommand(repository, logger)
 		signupApi := presentation.NewSignupApi(createUserCommand)
 
 		authRouter.POST("/signup", signupApi.Handle)
@@ -30,7 +31,7 @@ func UserModule(router *gin.Engine, db *gorm.DB) {
 
 	// user
 	{
-		userRouter := router.Group("/users")
+		userRouter := router.Group("v1/users")
 
 		queryUsersHandler := queries.NewQueryUsers(repository)
 		getUsersApi := presentation.NewGetUsersApi(queryUsersHandler)

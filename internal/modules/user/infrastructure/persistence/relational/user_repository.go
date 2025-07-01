@@ -26,25 +26,45 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *domain.User) erro
 	return r.db.Create(&userSQL).Error
 }
 
-func (r *UserRepository) GetListUser(ctx context.Context) ([]domain.User, error) {
+func (r *UserRepository) GetListUser(ctx context.Context) []*domain.User {
 	var usersSQL []UserSQL
 	if err := r.db.Find(&usersSQL).Error; err != nil {
-		return nil, err
+		return nil
 	}
 
-	users := make([]domain.User, len(usersSQL))
+	users := make([]*domain.User, len(usersSQL))
 	for i, userSQL := range usersSQL {
 		users[i] = ToDomain(userSQL)
 	}
 
-	return users, nil
+	return users
 }
 
-func (r *UserRepository) GetUserByID(ctx context.Context, id string) domain.User {
+func (r *UserRepository) GetUserByID(ctx context.Context, id string) *domain.User {
 	var userSQL UserSQL
 
 	if err := r.db.Where("id = ?", id).First(&userSQL).Error; err != nil {
-		return domain.User{}
+		return nil
+	}
+
+	return ToDomain(userSQL)
+}
+
+func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) *domain.User {
+	var userSQL UserSQL
+
+	if err := r.db.Where("email = ?", email).First(&userSQL).Error; err != nil {
+		return nil
+	}
+
+	return ToDomain(userSQL)
+}
+
+func (r *UserRepository) GetUserByUsername(ctx context.Context, username string) *domain.User {
+	var userSQL UserSQL
+
+	if err := r.db.Where("username = ?", username).First(&userSQL).Error; err != nil {
+		return nil
 	}
 
 	return ToDomain(userSQL)
