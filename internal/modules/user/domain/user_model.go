@@ -12,3 +12,13 @@ type User struct {
 	Phone    *string `json:"phone,omitempty"`
 	Role     string  `json:"role,omitempty"`
 }
+
+func (u *User) From(ur *UserCreation) *User {
+	return &User{
+		Username: ur.Username,
+		Email:    ur.Email,
+		Password: ur.Password,
+		Phone:    ur.Phone,
+		Role:     "user",
+	}
+}

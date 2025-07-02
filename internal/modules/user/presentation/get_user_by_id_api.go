@@ -27,7 +27,7 @@ func (api *getUserByIdApi) Handle(ctx *gin.Context) {
 	user, err := api.GetUserByIdCommand.Execute(ctx, id)
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, common.NewApiResponseError(err.Error()))
+		ctx.JSON(err.StatusCode, err)
 		return
 	}
 

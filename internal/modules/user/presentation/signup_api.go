@@ -14,24 +14,24 @@ type SignupApi interface {
 }
 
 type signupApi struct {
-	CreateUserCommand commands.CreateUserCommand
+	CreateUserCommand commands.CreateUserHandler
 }
 
-func NewSignupApi(createUserCommand commands.CreateUserCommand) SignupApi {
+func NewSignupApi(createUserCommand commands.CreateUserHandler) SignupApi {
 	return &signupApi{
 		CreateUserCommand: createUserCommand,
 	}
 }
 
 func (api *signupApi) Handle(ctx *gin.Context) {
-	dto := &domain.UserCreateRequest{}
+	dto := &domain.UserCreation{}
 
 	if err := ctx.ShouldBindJSON(dto); err != nil {
-		ctx.JSON(http.StatusBadRequest, common.NewApiResponseError(err.Error()))
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 
-	user := domain.UserCreateRequest{
+	user := domain.UserCreation{
 		Username: dto.Username,
 		Password: dto.Password,
 		Email:    dto.Email,
@@ -39,7 +39,7 @@ func (api *signupApi) Handle(ctx *gin.Context) {
 	}
 
 	if err := api.CreateUserCommand.Execute(ctx, &user); err != nil {
-		ctx.JSON(http.StatusInternalServerError, common.NewApiResponseError(err.Error()))
+		ctx.JSON(err.StatusCode, err)
 		return
 	}
 

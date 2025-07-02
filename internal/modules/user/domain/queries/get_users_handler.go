@@ -3,14 +3,15 @@ package queries
 import (
 	"context"
 	"user-service/internal/modules/user/domain"
+	"user-service/internal/shared/common"
 )
 
 type QueryUsersCommand interface {
-	Execute(ctx context.Context) ([]domain.UserExposed, error)
+	Execute(ctx context.Context) ([]domain.UserExposed, *common.AppError)
 }
 
 type QueryUser interface {
-	GetListUser(ctx context.Context) ([]domain.UserExposed, error)
+	GetListUser(ctx context.Context) ([]domain.UserExposed, *common.AppError)
 }
 
 type queryUsers struct {
@@ -23,8 +24,12 @@ func NewQueryUsers(userRepository domain.UserRepositoryPort) QueryUsersCommand {
 	}
 }
 
-func (c *queryUsers) Execute(ctx context.Context) ([]domain.UserExposed, error) {
-	users := c.userRepository.GetListUser(ctx)
+func (c *queryUsers) Execute(ctx context.Context) ([]domain.UserExposed, *common.AppError) {
+	users, err := c.userRepository.GetListUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	publicUsers := make([]domain.UserExposed, len(users))
 
 	for i, user := range users {

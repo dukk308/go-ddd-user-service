@@ -20,7 +20,7 @@ func UserModule(router *gin.Engine, db *gorm.DB) {
 	{
 		authRouter := router.Group("v1/auth")
 
-		createUserCommand := commands.NewCreateUserCommand(repository, logger)
+		createUserCommand := commands.NewCreateUserHandler(repository, logger)
 		signupApi := presentation.NewSignupApi(createUserCommand)
 
 		authRouter.POST("/signup", signupApi.Handle)

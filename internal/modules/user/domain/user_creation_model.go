@@ -2,14 +2,14 @@ package domain
 
 import "errors"
 
-type UserCreateRequest struct {
+type UserCreation struct {
 	Username string  `json:"username" binding:"required"`
 	Password string  `json:"password" binding:"required"`
 	Email    string  `json:"email" binding:"required,email"`
 	Phone    *string `json:"phone,omitempty"`
 }
 
-func (u *UserCreateRequest) Validate() error {
+func (u *UserCreation) Validate() error {
 	if u.Username == "" {
 		return errors.New("username is required")
 	}
